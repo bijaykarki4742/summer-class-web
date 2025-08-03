@@ -60,8 +60,7 @@ export default function AddTaskDialog({
         >
           <FaTimes />
         </button>
-        {/* Title */}
-            <h2 className="text-2xl font-bold text-gray-300 mb-6">{name || 'Task Name...'}</h2>
+        
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -74,6 +73,19 @@ export default function AddTaskDialog({
             });
           }}
         >
+          {/* Title Input */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold mb-1">Task Title</label>
+            <input
+              type="text"
+              className="w-full text-2xl font-bold text-gray-800 border-b-2 border-gray-200 px-0 py-2 focus:outline-none focus:border-orange-400"
+              placeholder="Enter task title..."
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
+
           <div className="flex gap-6 mb-4">
             <div className="flex-1">
               <label className="block text-sm font-semibold mb-1">Due date</label>

@@ -1,7 +1,19 @@
-import { FaRegSun, FaRegStar, FaUser, FaRegListAlt, FaRegCheckCircle, FaUserCheck } from 'react-icons/fa';
+"use client"
+
+import { FaRegSun, FaRegStar, FaUser, FaRegListAlt, FaRegCheckCircle, FaUserCheck, FaSignOutAlt } from 'react-icons/fa';
 import { MdSearch } from 'react-icons/md';
+import { useAuth } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 
 export default function Sidebar() {
+  const { user, signOut } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/login');
+  };
+
   return (
     <aside className="w-72 bg-white h-screen p-6 flex flex-col border-r border-gray-200">
       {/* Logo and App Name */}
@@ -9,6 +21,33 @@ export default function Sidebar() {
         <FaRegSun className="text-blue-500 text-2xl mr-2" />
         <span className="text-xl font-bold tracking-wide">MY TODO</span>
       </div>
+
+      {/* User Info */}
+      {user && (
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <FaUser className="text-blue-500 mr-2" />
+              <div>
+                <span className="text-sm font-medium text-gray-700 block">
+                  {user.user_metadata?.full_name || user.email}
+                </span>
+                <span className="text-xs text-gray-500 block">
+                  {user.email}
+                </span>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-gray-500 hover:text-red-500 transition-colors"
+              title="Logout"
+            >
+              <FaSignOutAlt />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Search Bar */}
       <div className="relative mb-6">
         <input
@@ -18,6 +57,7 @@ export default function Sidebar() {
         />
         <MdSearch className="absolute left-3 top-2.5 text-gray-400 text-xl" />
       </div>
+
       {/* Favorites Section */}
       <div className="mb-6">
         <div className="text-xs text-gray-500 font-semibold mb-2">Favorites</div>
@@ -59,8 +99,10 @@ export default function Sidebar() {
           </li>
         </ul>
       </div>
+
       {/* Divider */}
       <div className="border-t border-gray-200 my-4" />
+
       {/* Your own tags Section */}
       <div>
         <div className="text-xs text-gray-500 font-semibold mb-2">Your own tags</div>
