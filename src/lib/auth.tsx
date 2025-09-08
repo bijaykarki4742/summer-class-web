@@ -11,6 +11,8 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ success: boolean; error?: string; message?: string }>;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string; message?: string }>;
   signOut: () => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<{ success: boolean; error?: string; message?: string }>;
+  updatePassword: (newPassword: string) => Promise<{ success: boolean; error?: string; message?: string }>;
   loading: boolean;
   isConfigured: boolean;
 }
@@ -170,6 +172,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const requestPasswordReset = async (email: string) => {
+    if (!isConfigured) {
+      return { success: false, error: 'Supabase is not properly configured' };
+    }
+
+    try {
+      // Determine redirect URL for password reset completion
+      let redirectTo = process.env.NEXT_PUBLIC_SITE_URL ? `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password` : '';
+      if (typeof window !== 'undefined' && !redirectTo) {
+        redirectTo = `${window.location.origin}/reset-password`;
+      }
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo,
+      });
+
+      if (error) {
+        console.error('Password reset request error:', error);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true, message: 'If an account exists, a reset email has been sent.' };
+    } catch (error) {
+      console.error('Unexpected password reset request error:', error);
+      return { success: false, error: 'An unexpected error occurred' };
+    }
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    if (!isConfigured) {
+      return { success: false, error: 'Supabase is not properly configured' };
+    }
+
+    try {
+      const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        console.error('Update password error:', error);
+        return { success: false, error: error.message };
+      }
+      // If successful, data.user should be present and session may update
+      return { success: true, message: 'Password updated successfully' };
+    } catch (error) {
+      console.error('Unexpected update password error:', error);
+      return { success: false, error: 'An unexpected error occurred' };
+    }
+  };
+
   const value = {
     isAuthenticated: !!user,
     user,
@@ -177,6 +226,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signIn,
     signOut,
+    requestPasswordReset,
+    updatePassword,
     loading,
     isConfigured,
   };

@@ -119,7 +119,7 @@ export default function LoginPage() {
                             <input type="checkbox" className={styles.checkbox} />
                             <span className={styles.checkboxLabel}>Remember me</span>
                         </label>
-                        <a href="#" className={styles.forgotPassword}>
+                        <a href="/forgot-password" className={styles.forgotPassword}>
                             Forgot password?
                         </a>
                     </div>
@@ -132,7 +132,7 @@ export default function LoginPage() {
                 <div className={styles.footer}>
                     <p className={styles.signupText}>
                         {"Don't have an account? "}
-                        <a href="#" className={styles.signupLink}>
+                        <a href="/signup" className={styles.signupLink}>
                             Sign up
                         </a>
                     </p>

@@ -1,6 +1,6 @@
 "use client"
 
-import { FaRegSun, FaRegStar, FaUser, FaRegListAlt, FaRegCheckCircle, FaUserCheck, FaSignOutAlt } from 'react-icons/fa';
+import { FaRegSun, FaRegStar, FaUser, FaRegListAlt, FaRegCheckCircle, FaUserCheck, FaSignOutAlt, FaStickyNote } from 'react-icons/fa';
 import { MdSearch } from 'react-icons/md';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
@@ -80,7 +80,7 @@ export default function Sidebar() {
             </span>
             <span className="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">4</span>
           </li>
-          <li className="flex items-center justify-between px-2 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+          <li className="flex items-center justify-between px-2 py-2 rounded-lg hover:bg-gray-100 cursor-pointer" onClick={() => router.push('/') }>
             <span className="flex items-center gap-3">
               <FaRegListAlt className="text-blue-500" /> All
             </span>
@@ -92,9 +92,9 @@ export default function Sidebar() {
             </span>
             <span className="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-600">10</span>
           </li>
-          <li className="flex items-center justify-between px-2 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">
+          <li className="flex items-center justify-between px-2 py-2 rounded-lg hover:bg-gray-100 cursor-pointer" onClick={() => router.push('/sticky-notes')}>
             <span className="flex items-center gap-3">
-              <FaUserCheck className="text-blue-500" /> Assigned to me
+              <FaStickyNote className="text-blue-500" /> Sticky Notes
             </span>
           </li>
         </ul>
